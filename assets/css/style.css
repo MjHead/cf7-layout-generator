@@ -1,0 +1,21 @@
+.cf7-canvas {
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	background: #eee;
+}
+.cf7-canvas__field {
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	border-radius: 3px;
+	background: #ddd;
+	padding: 5px;
+	text-align: center;
+}
+.cf7-canvas__field-content {
+	display: flex;
+	justify-content: space-between;
+}
+.cf7-canvas__field-remove {
+	margin-right: 20px;
+	cursor: pointer;
+}
