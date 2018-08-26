@@ -15,17 +15,72 @@ var CFLG = new Vue({
 			{"x":0,"y":0,"w":6,"h":1,"i":"0"},
 			{"x":6,"y":0,"w":6,"h":1,"i":"1"},
 		],
-		index: 1
+		index: 1,
+		gutter: 10,
+		mobileBreakpoint: 576,
 	},
 	computed: {
 		resultHTML: function() {
-			var result = '';
+			var result    = ''
+				rows      = {}
+				rowsCount = 0
+				filled    = false;
 			
 			result += '<div class="cf-container">\r\n';
 
 			for ( var i = 0; i < this.result.length; i++ ) {
-				result += '\t<div class="cf-col-' + this.result[ i ].w + '">CF7 field here</div>\r\n';
+				if ( ! rows.hasOwnProperty( 'row' + this.result[ i ].y ) ) {
+					rows[ 'row' + this.result[ i ].y ] = [];
+				}
+
+				rows[ 'row' + this.result[ i ].y ].push( this.result[ i ] );
+				rowsCount++;
 			};
+
+			for ( var i = 0; i < rowsCount - 1; i++ ) {
+				
+				var currentRow = rows[ 'row' + i ];
+
+				if ( ! currentRow ) {
+					continue;
+				}
+
+				currentRow.sort( function( a, b ) {
+					if ( a.x < b.x ) {
+						return -1;
+					} else {
+						return 1;
+					}
+				} );
+
+				filled = 0;
+
+				for ( var j = 0; j < currentRow.length; j++ ) {
+
+					var field = currentRow[ j ],
+						push  = '',
+						col   = 'cf-col-' + field.w;
+					
+					if ( 0 < filled ) {
+						if ( filled < field.x ) {
+							push   = field.x - filled;
+							filled = filled + push;
+							push   = ' cf-push-' + push;
+						}
+					} else {
+						if ( 0 < field.x ) {
+							push   = ' cf-push-' + field.x;
+							filled = filled + field.x;
+						}
+					}
+
+					result += '\t<div class="' + col + push + '">CF7 field here</div>\r\n';
+
+					filled = filled + field.w;
+
+				}
+
+			}
 
 			result += '</div>';
 
@@ -98,7 +153,6 @@ var CFLG = new Vue({
 			for ( var i = 0; i <= newLayout.length - 1; i++ ) {
 				this.result.push( newLayout[ i ] );
 			};
-			console.log( this.result );
 		},
 		removeField: function( item, index ) {
 
