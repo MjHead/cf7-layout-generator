@@ -104,7 +104,7 @@ if ( ! class_exists( 'CFLG_Plugin' ) ) {
 				true
 			);
 
-			wp_enqueue_style( 'cf7-layout', CFLG_URL . 'assets/css/style.css' );
+		//	wp_enqueue_style( 'cf7-layout', CFLG_URL . 'assets/css/style.css' );
 
 		}
 

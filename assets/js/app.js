@@ -3,9 +3,9 @@ var GridItem = VueGridLayout.GridItem;
 var CFLG = new Vue({
 	el: '#cf7_layout_generator',
 	components: {
-        GridLayout,
-        GridItem,
-    },
+		GridLayout,
+		GridItem,
+	},
 	data: {
 		layout: [
 			{"x":0,"y":0,"w":6,"h":1,"i":"0"},
@@ -18,14 +18,15 @@ var CFLG = new Vue({
 		index: 1,
 		gutter: 10,
 		mobileBreakpoint: 576,
+		visibleResult: 'html',
 	},
 	computed: {
 		resultHTML: function() {
-			var result    = ''
-				rows      = {}
-				rowsCount = 0
+			var result    = '',
+				rows      = {},
+				rowsCount = 0,
 				filled    = false;
-			
+
 			result += '<div class="cf-container">\r\n';
 
 			for ( var i = 0; i < this.result.length; i++ ) {
@@ -38,7 +39,7 @@ var CFLG = new Vue({
 			};
 
 			for ( var i = 0; i < rowsCount - 1; i++ ) {
-				
+
 				var currentRow = rows[ 'row' + i ];
 
 				if ( ! currentRow ) {
@@ -60,7 +61,7 @@ var CFLG = new Vue({
 					var field = currentRow[ j ],
 						push  = '',
 						col   = 'cf-col-' + field.w;
-					
+
 					if ( 0 < filled ) {
 						if ( filled < field.x ) {
 							push   = field.x - filled;
@@ -90,32 +91,32 @@ var CFLG = new Vue({
 	methods: {
 		currentWidth: function( width ) {
 			switch( width ) {
-				
-				case 2: 
+
+				case 2:
 					return '1/6';
 
-				case 3: 
+				case 3:
 					return '1/4';
 
-				case 4: 
+				case 4:
 					return '1/3';
 
-				case 4: 
+				case 4:
 					return '1/3';
 
-				case 6: 
+				case 6:
 					return '1/2';
 
-				case 8: 
+				case 8:
 					return '2/3';
 
-				case 9: 
+				case 9:
 					return '3/4';
 
-				case 10: 
+				case 10:
 					return '5/6';
 
-				case 12: 
+				case 12:
 					return 'Fullwidth';
 
 				default:

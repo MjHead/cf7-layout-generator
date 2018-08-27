@@ -1,17 +1,7 @@
-<div class="cf7-settings">
-	<div class="cf7-settings__field">
-		Gutter (px)
-		<input type="number" v-model="gutter">
-	</div>
-	<div class="cf7-settings__field">
-		Mobile breakpoint (px)
-		<input type="number" v-model="mobileBreakpoint">
-	</div>
-</div>
 <grid-layout class="cf7-canvas"
 	:layout="layout"
 	:col-num="12"
-	:row-height="36"
+	:row-height="48"
 	:margin="[5, 5]"
 	:is-draggable="true"
 	:is-resizable="true"
@@ -21,7 +11,7 @@
 	@layout-updated="updateLayout"
 >
 	<grid-item class="cf7-canvas__field"
-		v-for="( item, index ) in layout" 
+		v-for="( item, index ) in layout"
 		:key="item.i"
 		:x="item.x"
 		:y="item.y"
@@ -31,17 +21,42 @@
 		:max-h="1"
 	>
 		<div class="cf7-canvas__field-content">
-			<div class="cf7-canvas__field-label">CF7 Field: {{ currentWidth( item.w ) }}</div>
-			<div class="cf7-canvas__field-remove" @click="removeField( item, index )">&times;</div>
+			<div class="cf7-canvas__field-remove" @click="removeField( item, index )"></div>
+			<div class="cf7-canvas__field-label">CF7 Field: <b>{{ currentWidth( item.w ) }}</b></div>
 		</div>
 	</grid-item>
 </grid-layout>
-<button type="button" @click="addField">Add Field</button>
+<button type="button" class="cf7-canvas__add" @click="addField">
+	<i class="nc-icon-glyph ui-2_small-add"></i>Add Field
+</button>
+<div class="cf7-settings">
+	<div class="cf7-settings__title">
+		Settings:
+	</div>
+	<div class="cf7-settings__field">
+		Gutter (px):
+		<input type="number" v-model="gutter">
+	</div>
+	<div class="cf7-settings__field">
+		Mobile breakpoint (px):
+		<input type="number" v-model="mobileBreakpoint">
+	</div>
+</div>
 <div class="cf7-result">
-	<div class="cf7-result__html">
+	<div class="cf7-result__tabs">
+		<div
+			:class="[ 'cf7-result__tabs-item', { 'item-active': visibleResult === 'html' } ]"
+			@click="visibleResult = 'html'"
+		>HTML</div>
+		<div
+			:class="[ 'cf7-result__tabs-item', { 'item-active': visibleResult === 'css' } ]"
+			@click="visibleResult = 'css'"
+		>CSS</div>
+	</div>
+	<div class="cf7-result__html" v-if="'html' === visibleResult">
 		<pre>{{ resultHTML }}</pre>
 	</div>
-	<div class="cf7-result__css">
+	<div class="cf7-result__css" v-if="'css' === visibleResult">
 		<pre>
 .cf-container {
 	display: -ms-flexbox;
