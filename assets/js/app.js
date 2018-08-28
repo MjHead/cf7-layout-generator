@@ -19,6 +19,8 @@ var CFLG = new Vue({
 		gutter: 10,
 		mobileBreakpoint: 576,
 		visibleResult: 'html',
+		showCopySuccess: false,
+		showCopyError: false,
 	},
 	computed: {
 		resultHTML: function() {
@@ -36,9 +38,9 @@ var CFLG = new Vue({
 
 				rows[ 'row' + this.result[ i ].y ].push( this.result[ i ] );
 				rowsCount++;
-			};
+			}
 
-			for ( var i = 0; i < rowsCount - 1; i++ ) {
+			for ( var i = 0; i < rowsCount; i++ ) {
 
 				var currentRow = rows[ 'row' + i ];
 
@@ -75,7 +77,7 @@ var CFLG = new Vue({
 						}
 					}
 
-					result += '\t<div class="' + col + push + '">CF7 field here</div>\r\n';
+					result += '\t<div class="' + col + push + '">CF7 field. Row: ' + ( i + 1 ) + '. Column: ' + ( j + 1 ) + '</div>\r\n';
 
 					filled = filled + field.w;
 
@@ -86,6 +88,30 @@ var CFLG = new Vue({
 			result += '</div>';
 
 			return result;
+		},
+		resultCSS: function() {
+
+			var result = '.cf-container {\r\n\tdisplay: -ms-flexbox;\r\n\tdisplay: flex;\r\n\t-ms-flex-wrap: wrap;\r\n\tflex-wrap: wrap;\r\n\tmargin-right: -' + ( this.gutter / 2 ) + 'px;\r\n\tmargin-left: -' + ( this.gutter / 2 ) + 'px;\r\n}\r\n.cf-col-1, .cf-col-2, .cf-col-3, .cf-col-4, .cf-col-5, .cf-col-6, .cf-col-7, .cf-col-8, .cf-col-9, .cf-col-10, .cf-col-11, .cf-col-12 {\r\n\tposition: relative;\r\n\twidth: 100%;\r\n\tmin-height: 1px;\r\n\tpadding-right: ' + ( this.gutter / 2 ) + 'px;\r\n\tpadding-left: ' + ( this.gutter / 2 ) + 'px;\r\n}\r\n@media ( min-width: ' + this.mobileBreakpoint + 'px ) {\r\n';
+
+			for ( var i = 1; i <= 12; i++ ) {
+
+				var width = ( i * 100 ) / 12;
+
+				if ( ( i * 100 ) % 12 !== 0 ) {
+					width = width.toPrecision( 7 );
+				}
+
+				result += '\t.cf-col-' + i +' {\r\n\t\t-ms-flex: 0 0 ' + width + '%;\r\n\t\tflex: 0 0 ' + width + '%;\r\n\t\tmax-width: ' + width + '%;\r\n\t}\r\n';
+
+				if ( 12 !== i ) {
+					result += '\t.cf-push-' + i + ' { margin-left: ' + width + '%; }\r\n';
+				}
+			}
+
+			result += '}';
+
+			return result;
+
 		}
 	},
 	methods: {
@@ -133,7 +159,7 @@ var CFLG = new Vue({
 				if ( currY > maxY ) {
 					maxY = currY;
 				}
-			};
+			}
 
 			maxY++;
 			this.index++;
@@ -144,7 +170,7 @@ var CFLG = new Vue({
 				"w": 12,
 				"h": 1,
 				"i": this.index
-			}
+			};
 
 			this.layout.push( newItem );
 			this.result.push( newItem );
@@ -153,7 +179,7 @@ var CFLG = new Vue({
 			this.result.splice( 0, this.result.length );
 			for ( var i = 0; i <= newLayout.length - 1; i++ ) {
 				this.result.push( newLayout[ i ] );
-			};
+			}
 		},
 		removeField: function( item, index ) {
 
@@ -164,8 +190,41 @@ var CFLG = new Vue({
 					this.result.splice( i, 1 );
 					return;
 				}
-			};
+			}
 
-		}
+		},
+		copySuccess: function() {
+
+			this.showCopySuccess = true;
+			this.showCopyError   = false;
+
+			var self = this,
+				timeout;
+
+			if ( timeout ) {
+				clearTimeout( timeout );
+			}
+
+			timeout = setTimeout( function() {
+				self.showCopySuccess = false;
+			}, 3000 );
+
+		},
+		copyError: function() {
+			this.showCopySuccess = false;
+			this.showCopyError   = true;
+
+			var self = this,
+				timeout;
+
+			if ( timeout ) {
+				clearTimeout( timeout );
+			}
+
+			timeout = setTimeout( function() {
+				self.showCopyError = false;
+			}, 3000 );
+
+		},
 	}
 });
